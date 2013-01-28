@@ -16,39 +16,32 @@ li { list-style-type: none; }
   height: 100px;
   line-height: 100px;
   border-bottom: 2px solid #999;
-  #nav {
-    li {
-      display: inline-block;
-      &.active > a {
-        cursor: default;
-        color: black;
-        &:hover { text-decoration: none; }
-      }
-    }
-  }
 }
-
-img {
-  max-width: 300px;
-}
-
-body.loading div.loading-status {
+#nav > li {
   display: inline-block;
 }
+#nav > li.active > a {
+  cursor: default;
+  color: black;
+}
+#nav > li.active > a:hover { text-decoration: none; }
+
+img { max-width: 300px; }
+
+body.loading div.loading-status { display: inline-block; }
+
 div.loading-status {
   position: fixed;
   height: 20px;
   top: 50%;
   width: 1000px;
   display: none;
-  > p {
-    text-align: center;
-  }
-  > div {
-    transition: width 2s;
-    height: 2px;
-    background-color: #ccc;
-    width: 0;
-  }
+}
+div.loading-status > p { text-align: center; }
+div.loading-status > div {
+  transition: width 2s;
+  height: 2px;
+  background-color: #ccc;
+  width: 0;
 }
 
