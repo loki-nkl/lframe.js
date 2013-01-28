@@ -2,6 +2,10 @@
 
 $(function() {
 
+  $('a[href=#]').click(function() {
+    alert('hash btn clicked');
+  });
+
   lframe.init({
     cacheables: ["/demo/page1.html", "/demo/images.html"],
     preload: ["/demo/page1.html", "/demo/images.html"],
@@ -20,4 +24,5 @@ $(function() {
   $(window).on('statechangecomplete', function() {
     updateLoadingStatus(0);
   });
+
 });

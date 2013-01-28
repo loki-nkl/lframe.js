@@ -64,11 +64,12 @@
         $this.find('a:internal:not(.no-ajaxy)').click(function(event){
           // Continue as normal for cmd clicks etc, open new tabs...
           if ( event.which == 2 || event.metaKey ) { return true; }
-
           var url = $(this).attr('href');
-          window.History.pushState(null, null, url);
-          event.preventDefault();
-          return false;
+          if (url[0] != '#') {
+            window.History.pushState(null, null, url);
+            event.preventDefault();
+            return false;
+          }
         });
         return $this;
       };
