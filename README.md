@@ -14,7 +14,7 @@ All options of lframe.init() are optional.
       preload:                  ["/", "/page1", "/images"],
       preloadImagesBeforeShow:  true,
       preloadImagesEventName:   'imageloaded',
-
+      loadingSelector:          false
     });
     
 Helpers
@@ -25,3 +25,8 @@ Helpers
     lframe.fullReload();
     
     lframe.go('/home');
+
+Project Using lframe.js
+=======================
+
+[Lokinote](http://lokinote.com)
