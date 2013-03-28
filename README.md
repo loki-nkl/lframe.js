@@ -29,4 +29,4 @@ Helpers
 Project Using lframe.js
 =======================
 
-[Lokinote](http://lokinote.com)
+[Lokinote.com](http://lokinote.com)
