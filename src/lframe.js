@@ -24,10 +24,12 @@
       activeClass:              'active',
       bodyLoadingClass:         'loading',
       completedEventName:       'statechangecomplete',
+      beforeChangeEventName:    'beforestatechange',
       cacheables:               [],
       preload:                  [],
       preloadImagesBeforeShow:  true,
       preloadImagesEventName:   'imageloaded',
+      loadingSelector:          false
     }, opt);
     
     // fall back to traditional http link if no history supported
@@ -61,7 +63,7 @@
       // Ajaxify Helper
       $.fn.ajaxify = function(){
         var $this = $(this);
-        $this.find('a:internal:not(.no-ajaxy)').click(function(event){
+        $this.find('a:internal:not(.no-ajaxy):not([target=_blank])').click(function(event){
           // Continue as normal for cmd clicks etc, open new tabs...
           if ( event.which == 2 || event.metaKey ) { return true; }
           var url = $(this).attr('href');
@@ -92,7 +94,7 @@
           .each(function() {
             var self = $(this);
             var href = $('a', self).prop('href');
-            if (href === url) {
+            if (!url.indexOf(href)) {
               self.addClass(opt.activeClass);
             }
           });
@@ -139,6 +141,7 @@
           window.document.location.href = url;
           return false;
         }
+        $window.trigger(opt.beforeChangeEventName, getRelativeUrl());
         updateActiveMenuItem(url);
 
         var $data = $(html);
@@ -146,7 +149,9 @@
         changeDocumentTitle(title);
 
         $page = $data.filter(opt.contentSelector);
+        if ($page.length === 0) $page = $(opt.contentSelector, $data);
         preloadImages($page, function() {
+          if (opt.loadingSelector) $(opt.loadingSelector).stop(true, true).hide(0);
           // Update the content
           $content
             .stop(true,true)
@@ -183,8 +188,13 @@
             cachePageIfCacheable(html, relativeUrl);
           },
           error: function(jqXHR, textStatus, errorThrown){
-            window.document.location.href = url;
-            return false;
+            if (jqXHR.status === 404 || jqXHR.status === 500) {
+              var html = jqXHR.responseText;
+              if (render === true) renderPage(html, url);
+              cachePageIfCacheable(html, relativeUrl);
+            } else {
+              window.document.location.href = url;
+            }
           }
         });
       }
@@ -216,6 +226,8 @@
         // Which prevents that annoying pop bang issue when loading in new content
         // TODO: better animation 
         $content.fadeOut(500);
+
+        if (opt.loadingSelector) $(opt.loadingSelector).fadeIn(400);
         
         var cache = cachedPages[relativeUrl];
         if (cache) {
